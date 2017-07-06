@@ -66,7 +66,7 @@ app.delete('/todos/:id', (req, res) => {
       return res.status(404).send();
     }
     console.log(`Your doc : ${JSON.stringify(doc, undefined, 2)} has been successfully removed.`);
-    return res.status(200).send(`Your doc : ${JSON.stringify(doc, undefined, 2)} has been successfully removed.`)
+    return res.status(200).send({doc});
   }).catch((err) => {
     return res.status(400).send();
   });
