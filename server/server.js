@@ -103,6 +103,22 @@ app.patch('/todos/:id', (req, res) => {
 
 });
 
+app.post('/users', (req, res) => {
+  var body = _.pick(req.body, ['email', 'password']);
+  var user = new User(body);
+
+  user.save().then((doc) => {
+    return doc.generateAuthToken();
+  }).then((token) => {
+    res.header('x-auth', token).send(user);
+    // console.log(`New user saved : ${user}`);
+  }).catch((err) => {
+    res.status(400).send(err)
+    console.log(`Error occured trying to save user : ${err}`);
+  });
+
+});
+
 app.listen(port, () => {
   console.log(`Listening to port : ${port}`);
 });
