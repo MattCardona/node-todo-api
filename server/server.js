@@ -7,6 +7,7 @@ const _ = require('lodash');
 const {mongoose} = require('./db/mongoose');
 const {Todo} = require('./models/todo');
 const {User} = require('./models/user');
+const {authenticate} = require('./middleware/authenticate');
 
 var app = express();
 const port = process.env.PORT;
@@ -111,12 +112,15 @@ app.post('/users', (req, res) => {
     return doc.generateAuthToken();
   }).then((token) => {
     res.header('x-auth', token).send(user);
-    // console.log(`New user saved : ${user}`);
-  }).catch((err) => {
+   }).catch((err) => {
     res.status(400).send(err)
     console.log(`Error occured trying to save user : ${err}`);
   });
 
+});
+
+app.get('/users/me', authenticate, (req, res) => {
+  res.send(req.user )
 });
 
 app.listen(port, () => {
